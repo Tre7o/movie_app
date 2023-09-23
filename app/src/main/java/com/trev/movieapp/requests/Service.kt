@@ -10,9 +10,6 @@ class Service {
     private val credentials: Credentials = Credentials()
     private val baseURL = credentials.baseURL
 
-    //
-    private var movie_api = getRetrofitInstance().create(MovieAPI::class.java)
-
     //creating retrofit instance
     fun getRetrofitInstance(): Retrofit{
         return Retrofit.Builder()
@@ -20,4 +17,12 @@ class Service {
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
     }
+
+    //getting retrofit instance
+    private var movie_api = getRetrofitInstance().create(MovieAPI::class.java)
+
+    fun getMovie(): MovieAPI{
+        return movie_api
+    }
+
 }
