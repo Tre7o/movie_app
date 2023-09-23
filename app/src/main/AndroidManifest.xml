@@ -15,10 +15,23 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+            <tools:validation testUrl="https://tre7o.github.io/movie_app/" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="tre7o.github.io"
+                    android:pathPrefix="/movie_app" />
             </intent-filter>
         </activity>
     </application>
