@@ -12,9 +12,9 @@ class MovieResponse {
     @Expose
     lateinit var movie: MovieModel
 
-    fun getMovie(): MovieModel{
-        return movie
-    }
+//    fun getMovie(): MovieModel{
+//        return movie
+//    }
 
     override fun toString(): String {
         return "MovieResponse(movie=$movie)"

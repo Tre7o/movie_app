@@ -21,7 +21,7 @@ class Service {
     //getting retrofit instance
     private var movie_api = getRetrofitInstance().create(MovieAPI::class.java)
 
-    fun getMovie(): MovieAPI{
+    fun getMovieAPI(): MovieAPI{
         return movie_api
     }
 
