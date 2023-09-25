@@ -3,7 +3,6 @@ package com.trev.movieapp.responses
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.trev.movieapp.models.MovieModel
-import kotlin.properties.Delegates
 
 class MovieSearchResponses {
     @SerializedName("total_results")

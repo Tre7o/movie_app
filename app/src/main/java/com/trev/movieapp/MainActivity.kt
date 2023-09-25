@@ -6,6 +6,7 @@ import android.content.Intent
 import com.trev.movieapp.assets.Credentials
 import android.net.Uri
 import android.util.Log
+import com.trev.movieapp.assets.MovieAPI
 import com.trev.movieapp.databinding.ActivityMainBinding
 import com.trev.movieapp.models.MovieModel
 import com.trev.movieapp.requests.Service
@@ -34,27 +35,36 @@ class MainActivity : AppCompatActivity() {
     }
     private fun getRetrofitResponse() {
         val credentials: Credentials = Credentials()
-        val service = Service()
-        val movieAPI = service.getMovieAPI()
+        val retrofit = Service().getRetrofitInstance()
+        val movieAPI = retrofit.create(MovieAPI::class.java)
 
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            val response = movieAPI.searchMovie(credentials.api_key, "Jack Reacher", "1")
+//            Log.d("MyTag", "Response received: $response")
+//        }
+//
         val responseCall: Call<MovieSearchResponses> = movieAPI.searchMovie(
             credentials.api_key, "Jack Reacher", "1"
         )
 
         responseCall.enqueue(object : Callback<MovieSearchResponses> {
-            override fun onResponse(call: Call<MovieSearchResponses>, response: Response<MovieSearchResponses>) {
-                // Your onResponse logic here
-                if(response.body() != null){
-                    Log.v("MyTag", "Response = ${response.body()?.toString()}")
 
-                    val movies: List<MovieModel> = ArrayList(response.body()?.getMovieList() ?: emptyList())
+            override fun onResponse(
+                call: Call<MovieSearchResponses>,
+                response: Response<MovieSearchResponses>
+            ) {
+                if(response.isSuccessful){
+                    Log.v("MyTag", "Response = ${response.body().toString()}")
 
-                    for (movie in movies) {
-                        Log.v("MyTag", "List = ${movie.release_date}")
+//                    val movies: List<MovieModel> = ArrayList(response.body()?.getMovieList() ?: emptyList())
+
+                    val movieList: List<MovieModel> = ArrayList(response.body()!!.getMovieList())
+
+                    for (movieItem in movieList) {
+                        Log.v("MyTag", "List = ${movieItem.release_date}")
                     }
 
                 }else{
-
                     try {
                         Log.v("MyTag", "Error = ${response.errorBody().toString()}")
                     }catch (exception: Exception){
@@ -62,12 +72,12 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-
             }
 
             override fun onFailure(call: Call<MovieSearchResponses>, t: Throwable) {
-                // Your onFailure logic here
+                TODO("Not yet implemented")
             }
         })
     }
+
 }

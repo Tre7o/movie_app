@@ -2,7 +2,6 @@ package com.trev.movieapp.requests
 
 import com.google.gson.GsonBuilder
 import com.trev.movieapp.assets.Credentials
-import com.trev.movieapp.assets.MovieAPI
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -19,10 +18,10 @@ class Service {
     }
 
     //getting retrofit instance
-    private var movie_api = getRetrofitInstance().create(MovieAPI::class.java)
-
-    fun getMovieAPI(): MovieAPI{
-        return movie_api
-    }
+//    private var movie_api = getRetrofitInstance().create(MovieAPI::class.java)
+//
+//    fun getMovieAPI(): MovieAPI{
+//        return movie_api
+//    }
 
 }
