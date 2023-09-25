@@ -11,9 +11,9 @@ class MovieResponse {
     @Expose
     lateinit var movie: MovieModel
 
-//    fun getMovie(): MovieModel{
-//        return movie
-//    }
+    fun getMovie(): MovieModel{
+        return movie
+    }
 
     //returning one movie response
     override fun toString(): String {
