@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.trev.movieapp.models.MovieModel
 
+//this class is responsible for making multiple movie requests to the api
 class MovieSearchResponses {
     @SerializedName("total_results")
     @Expose
@@ -17,6 +18,7 @@ class MovieSearchResponses {
         return total_count
     }
 
+    //returning multiple movie responses
     fun getMovieList(): List<MovieModel>{
         return movieList
     }

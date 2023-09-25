@@ -30,7 +30,8 @@ class MainActivity : AppCompatActivity() {
         println(appLinkData)
 
         binding.sendBtn.setOnClickListener {
-            getRetrofitResponse()
+            getRetrofitResponseUsingID()
+//            getRetrofitResponse()
         }
     }
     private fun getRetrofitResponse() {
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 //        }
 //
         val responseCall: Call<MovieSearchResponses> = movieAPI.searchMovie(
-            credentials.api_key, "Jack Reacher", "1"
+            credentials.api_key, "Action", "1"
         )
 
         responseCall.enqueue(object : Callback<MovieSearchResponses> {
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     val movieList: List<MovieModel> = ArrayList(response.body()!!.getMovieList())
 
                     for (movieItem in movieList) {
-                        Log.v("MyTag", "List = ${movieItem.release_date}")
+                        Log.v("MyTag", "Title = ${movieItem.original_title}")
                     }
 
                 }else{
@@ -75,8 +76,41 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<MovieSearchResponses>, t: Throwable) {
-                TODO("Not yet implemented")
+
+                Log.v("MyTag", "Error = ${t.localizedMessage}")
+
             }
+        })
+    }
+
+    private fun getRetrofitResponseUsingID(){
+
+        val credentials: Credentials = Credentials()
+        val retrofit = Service().getRetrofitInstance()
+        val movieAPI = retrofit.create(MovieAPI::class.java)
+
+        val responseCall: Call<MovieModel> = movieAPI.getMovie(550, credentials.api_key)
+
+        responseCall.enqueue(object: Callback<MovieModel>{
+            override fun onResponse(call: Call<MovieModel>, response: Response<MovieModel>) {
+                if (response.isSuccessful){
+                    val movie: MovieModel? = response.body()
+                    Log.v("MyTag", "Title: ${movie!!.original_title}")
+                }
+                else{
+                    try {
+                        Log.v("MyTag", "Error = ${response.errorBody().toString()}")
+                    }catch (exception: Exception){
+                        exception.printStackTrace()
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<MovieModel>, t: Throwable) {
+
+            }
+
         })
     }
 

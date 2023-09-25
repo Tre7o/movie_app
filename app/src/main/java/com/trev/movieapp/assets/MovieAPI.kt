@@ -1,8 +1,10 @@
 package com.trev.movieapp.assets
 
+import com.trev.movieapp.models.MovieModel
 import com.trev.movieapp.responses.MovieSearchResponses
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieAPI {
@@ -15,5 +17,14 @@ interface MovieAPI {
         @Query(value = "query")query: String,
         @Query(value = "page")page: String
     ): Call<MovieSearchResponses>
+
+    // https://api.themoviedb.org/3/movie/550?api_key=be629fc225dc4ddfb916e04cb6e7625e
+    // search for a specific movie
+    // movie_id = 550 id for Fight Club
+    @GET("movie/{movie_id}?")
+    fun getMovie(
+        @Path("movie_id")movie_id: Int,
+        @Query(value = "api_key")api_key: String,
+    ): Call<MovieModel>
 
 }
