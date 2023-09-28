@@ -1,25 +1,35 @@
 package com.trev.movieapp.ViewModels
 
+import android.app.DownloadManager.Query
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.trev.movieapp.models.MovieModel
 import com.trev.movieapp.repo.MovieRepository
+import com.trev.movieapp.requests.MovieAPIClient
+import kotlinx.coroutines.launch
 
 // this class is used for the ViewModel
 class MovieViewModel: ViewModel() {
 
-    // LiveData
-//    val movieLiveData: MutableLiveData<List<MovieModel>> = MutableLiveData()
-
     //creating an instance of the MovieRepository in the view model
-    val movieRepo: MovieRepository = MovieRepository().getInstance()
+    val movieRepo = MovieRepository()
 
-    //returning the list of movies from the view model from the movie repo
-    fun getMovieLiveData(): LiveData<List<MovieModel>>{
-        return movieRepo.getMoviesFromRepo()
+    // updating the movieLiveData with the data from MovieRepository
+    val movieLiveData: LiveData<List<MovieModel>?> = movieRepo.movieLiveData
+
+//    val movieAPIClient = MovieAPIClient()
+
+    fun fetchMovies(query: String, pageNumber: Int){
+        movieRepo.fetchMovies(query, pageNumber)
     }
 
-
+    //returning the list of movies using the view model from the movie repo
+//    fun getMovieLiveData(): LiveData<List<MovieModel>?>{
+//        Log.v("MyTag", "Got movie data from MovieRepo")
+//        return movieRepo.getMoviesFromRepo()
+//    }
 
 }

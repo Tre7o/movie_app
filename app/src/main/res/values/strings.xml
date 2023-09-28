@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MovieApp</string>
     <string name="send">Send</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="duration">Duration</string>
+    <string name="genre">Genre</string>
+    <string name="poster_image">Movie poster image</string>
 </resources>

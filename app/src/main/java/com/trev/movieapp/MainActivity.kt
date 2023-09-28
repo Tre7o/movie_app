@@ -7,13 +7,12 @@ import com.trev.movieapp.assets.Credentials
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.trev.movieapp.ViewModels.MovieViewModel
+import com.trev.movieapp.requests.RetrofitClient
 import com.trev.movieapp.assets.MovieAPI
 import com.trev.movieapp.databinding.ActivityMainBinding
 import com.trev.movieapp.models.MovieModel
-import com.trev.movieapp.requests.Service
 import com.trev.movieapp.responses.MovieSearchResponses
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var movieViewModel: MovieViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -35,29 +35,40 @@ class MainActivity : AppCompatActivity() {
 
         movieViewModel = ViewModelProvider(this)[MovieViewModel::class.java]
 
+        observeDataChanges()
+
         binding.sendBtn.setOnClickListener {
-            getRetrofitResponseUsingID()
-//            getRetrofitResponse()
+
+            searchMovieApi("Fast", 2)
         }
     }
 
     // observing data changes
     private fun observeDataChanges(){
-        movieViewModel.getMovieLiveData().observe(this, Observer {
-            
+
+        movieViewModel.movieLiveData.observe(this, Observer<List<MovieModel>?> { movies ->
+            // This block will be executed when movieLiveData changes
+            if (movies != null){
+                for (movie in movies){
+                    Log.v("MyTag", "Observer: ${movie.original_title}")
+                }
+            }
+
         })
-//        movieViewModel.movieLiveData.observe(this, Observer {
-//
-//        })
+
+    }
+    
+    private fun searchMovieApi(query: String, pageNumber: Int){
+        movieViewModel.fetchMovies(query, pageNumber)
     }
 
     private fun getRetrofitResponse() {
-        val credentials: Credentials = Credentials()
-        val retrofit = Service().getRetrofitInstance()
+        val credentials = Credentials()
+        val retrofit = RetrofitClient.instance
         val movieAPI = retrofit.create(MovieAPI::class.java)
 
         val responseCall: Call<MovieSearchResponses> = movieAPI.searchMovie(
-            credentials.api_key, "Action", "1"
+            credentials.api_key, "Action", 1
         )
 
         responseCall.enqueue(object : Callback<MovieSearchResponses> {
@@ -96,11 +107,11 @@ class MainActivity : AppCompatActivity() {
     }
     private fun getRetrofitResponseUsingID(){
 
-        val credentials: Credentials = Credentials()
-        val retrofit = Service().getRetrofitInstance()
+        val credentials = Credentials()
+        val retrofit = RetrofitClient.instance
         val movieAPI = retrofit.create(MovieAPI::class.java)
 
-        val responseCall: Call<MovieModel> = movieAPI.getMovie(550, credentials.api_key)
+        val responseCall: Call<MovieModel> = movieAPI.getMovieUsingID(550, credentials.api_key)
 
         responseCall.enqueue(object: Callback<MovieModel>{
             override fun onResponse(call: Call<MovieModel>, response: Response<MovieModel>) {

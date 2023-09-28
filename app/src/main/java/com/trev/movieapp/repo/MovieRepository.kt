@@ -1,28 +1,24 @@
 package com.trev.movieapp.repo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.trev.movieapp.models.MovieModel
+import com.trev.movieapp.requests.MovieAPIClient
 
 class MovieRepository {
 
-    //creating an instance of movieRepository
-    var movieRepository: MovieRepository? = null
+    var movieAPIClient = MovieAPIClient()
 
-    //creating an instance of the movie LiveData
-    val movieLiveData: MutableLiveData<List<MovieModel>> = MutableLiveData()
+    // updating the movieLiveData with the data from MovieAPIClient
+    val movieLiveData = movieAPIClient.movieLiveData
 
-    //fetching the movieRepository instance
-    fun getInstance(): MovieRepository{
-        if(movieRepository == null){
-            movieRepository = MovieRepository()
-        }
-        return movieRepository as MovieRepository
-    }
 
-    //getting the list of movies
-    fun getMoviesFromRepo(): LiveData<List<MovieModel>>{
-        return movieLiveData
+    // getting the list of movies
+    fun fetchMovies(query: String, pageNumber: Int){
+//        return movieLiveData
+        Log.v("MyTag", "MovieAPIClient instantiated in MovieRepo")
+        movieAPIClient.startSearch(query, pageNumber)
     }
 
 }
