@@ -6,9 +6,14 @@ import android.content.Intent
 import com.trev.movieapp.assets.Credentials
 import android.net.Uri
 import android.util.Log
+import android.view.Menu
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.trev.movieapp.ViewModels.MovieViewModel
+import com.trev.movieapp.adapters.MovieAdapter
 import com.trev.movieapp.requests.RetrofitClient
 import com.trev.movieapp.assets.MovieAPI
 import com.trev.movieapp.databinding.ActivityMainBinding
@@ -21,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var movieViewModel: MovieViewModel
+    private lateinit var movieRecycler: RecyclerView
+    private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +40,19 @@ class MainActivity : AppCompatActivity() {
         val appLinkData: Uri? = appLinkIntent.data
         println(appLinkData)
 
+        val toolbar: Toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
+
+        movieRecycler = binding.movieRecycler
+        movieAdapter = MovieAdapter()
+
+        movieRecycler.layoutManager = LinearLayoutManager(this)
+        movieRecycler.adapter = movieAdapter
+
         movieViewModel = ViewModelProvider(this)[MovieViewModel::class.java]
 
         observeDataChanges()
-
-        binding.sendBtn.setOnClickListener {
-
-            searchMovieApi("Fast", 2)
-        }
+        searchMovieApi("Fast", 1)
     }
 
     // observing data changes
@@ -48,18 +60,22 @@ class MainActivity : AppCompatActivity() {
 
         movieViewModel.movieLiveData.observe(this, Observer<List<MovieModel>?> { movies ->
             // This block will be executed when movieLiveData changes
+            movieAdapter.submitList(movies)
             if (movies != null){
                 for (movie in movies){
-                    Log.v("MyTag", "Observer: ${movie.original_title}")
+                    Log.v("MyTag", "Observer: ${movie.runtime}")
                 }
             }
-
         })
-
     }
     
     private fun searchMovieApi(query: String, pageNumber: Int){
         movieViewModel.fetchMovies(query, pageNumber)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.search_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun getRetrofitResponse() {

@@ -1,9 +1,35 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.MovieApp" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.MovieApp" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
     <style name="Theme.MovieApp" parent="Base.Theme.MovieApp" />
+
+    <style name="MovieAppTheme" parent="Base.Theme.MovieApp">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="fontFamily">@font/ubuntu</item>
+    </style>
+
+    <style name="Theme.MovieApp.SplashScreen" parent="MovieAppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/purple</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:orientation">vertical</item>
+        <item name="fontFamily">@font/ubuntu</item>
+        <item name="fontWeight">700</item>
+    </style>
+
+    <style name="SearchViewTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="editTextColor">@color/white</item>
+        <item name="hintTextColor">@color/grey</item>
+    </style>
+
+<!--    app:queryHint="Search for movie..."-->
+<!--    app:searchHintIcon="@null"-->
+
 </resources>

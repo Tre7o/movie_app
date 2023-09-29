@@ -8,6 +8,7 @@ data class MovieModel (
     var release_date: String,
     var vote_average: Double,
     var movie_overview: String,
+    var runtime: Int?
 
 )
 

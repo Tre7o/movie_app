@@ -5,4 +5,8 @@
     <string name="duration">Duration</string>
     <string name="genre">Genre</string>
     <string name="poster_image">Movie poster image</string>
+    <string name="release_date">Release Date</string>
+    <string name="search">Search for movies</string>
+    <string name="welcome">Welcome to the MovieApp</string>
+    <string name="continue_screen">Continue</string>
 </resources>

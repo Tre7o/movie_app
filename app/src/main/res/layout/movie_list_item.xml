@@ -15,19 +15,18 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/foodImage"
+            android:id="@+id/imagePoster"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"
-            android:layout_marginBottom="18dp"
             android:contentDescription="@string/poster_image" />
 
         <TextView
             android:id="@+id/movie_title"
-            android:layout_width="160dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:padding="10dp"
             android:text="@string/movie_title"
             android:textStyle="bold"
             android:textSize="25sp"
@@ -36,32 +35,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <TextView
-                android:id="@+id/movie_genre"
-                android:layout_width="wrap_content"
+                android:id="@+id/release_date"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/genre"
+                android:text="@string/release_date"
                 android:layout_weight="90"
-                android:textSize="15sp"
-                android:padding="20dp" />
+                android:textSize="15sp"/>
 
             <TextView
                 android:id="@+id/movie_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/duration"
-                android:textSize="15sp"
-                android:padding="20dp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
         <RatingBar
             android:id="@+id/rating_bar"
-            android:layout_width="match_parent"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:numStars="5"/>
+            android:numStars="5"
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 
