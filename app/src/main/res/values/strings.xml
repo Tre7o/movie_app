@@ -9,4 +9,6 @@
     <string name="search">Search for movies</string>
     <string name="welcome">Welcome to the MovieApp</string>
     <string name="continue_screen">Continue</string>
+    <string name="movie_details">Movie details</string>
+    <string name="overview">Overview</string>
 </resources>

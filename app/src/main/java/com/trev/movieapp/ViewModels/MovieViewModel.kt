@@ -26,6 +26,10 @@ class MovieViewModel: ViewModel() {
         movieRepo.fetchMovies(query, pageNumber)
     }
 
+    fun searchNextPageView(){
+        movieRepo.searchNextPage()
+    }
+
     //returning the list of movies using the view model from the movie repo
 //    fun getMovieLiveData(): LiveData<List<MovieModel>?>{
 //        Log.v("MyTag", "Got movie data from MovieRepo")

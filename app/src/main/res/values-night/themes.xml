@@ -24,6 +24,6 @@
 
     <style name="SearchViewTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="editTextColor">@color/white</item>
-        <item name="hintTextColor">@color/grey</item>
+        <item name="queryHint">@color/grey</item>
     </style>
 </resources>

@@ -7,6 +7,7 @@ import com.trev.movieapp.assets.Credentials
 import android.net.Uri
 import android.util.Log
 import android.view.Menu
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -43,16 +44,30 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = binding.toolbar
         setSupportActionBar(toolbar)
 
+        movieViewModel = ViewModelProvider(this)[MovieViewModel::class.java]
+
         movieRecycler = binding.movieRecycler
         movieAdapter = MovieAdapter()
 
         movieRecycler.layoutManager = LinearLayoutManager(this)
         movieRecycler.adapter = movieAdapter
 
-        movieViewModel = ViewModelProvider(this)[MovieViewModel::class.java]
+        // RecyclerView Pagination
+        // allow user to go to next page of query results
+        movieRecycler.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if(!recyclerView.canScrollVertically(1)){
+                    // if recyclerView can't scroll vertically anymore
+                    // display next results
+                    movieViewModel.searchNextPageView()
+                }
+            }
+        })
 
+        // allow user to search for movies
+        setUpSearchView()
         observeDataChanges()
-        searchMovieApi("Fast", 1)
+
     }
 
     // observing data changes
@@ -63,20 +78,37 @@ class MainActivity : AppCompatActivity() {
             movieAdapter.submitList(movies)
             if (movies != null){
                 for (movie in movies){
-                    Log.v("MyTag", "Observer: ${movie.runtime}")
+                    Log.v("MyTag", "Observer: ${movie.movie_overview}")
                 }
             }
         })
     }
-    
+
+    // query for searching movies
     private fun searchMovieApi(query: String, pageNumber: Int){
         movieViewModel.fetchMovies(query, pageNumber)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.search_menu, menu)
-        return super.onCreateOptionsMenu(menu)
+    // get data from search view and make call to the API
+    private fun setUpSearchView(){
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchMovieApi(query!!, pageNumber = 1)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
     }
+
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.search_menu, menu)
+//        return super.onCreateOptionsMenu(menu)
+//    }
+
 
     private fun getRetrofitResponse() {
         val credentials = Credentials()
