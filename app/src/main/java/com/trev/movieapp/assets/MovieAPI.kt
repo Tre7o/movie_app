@@ -27,4 +27,12 @@ interface MovieAPI {
         @Query(value = "api_key")api_key: String,
     ): Call<MovieModel>
 
+    // get popular movies
+    // https://api.themoviedb.org/3/movie/popular?api_key=be629fc225dc4ddfb916e04cb6e7625e&page=1
+    @GET("movie/popular")
+    fun getPopularMovies(
+        @Query(value = "api_key")api_key: String,
+        @Query(value = "page")page: Int
+    ): Call<MovieSearchResponses>
+
 }

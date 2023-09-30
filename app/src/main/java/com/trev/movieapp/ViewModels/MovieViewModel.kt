@@ -20,10 +20,18 @@ class MovieViewModel: ViewModel() {
     // updating the movieLiveData with the data from MovieRepository
     val movieLiveData: LiveData<List<MovieModel>?> = movieRepo.movieLiveData
 
+    // updating popular movie live data with the data from MovieRepository
+    val popularMovieLiveData: LiveData<List<MovieModel>?> = movieRepo.popularMovieLiveData
+
 //    val movieAPIClient = MovieAPIClient()
 
     fun fetchMovies(query: String, pageNumber: Int){
         movieRepo.fetchMovies(query, pageNumber)
+    }
+
+    fun fetchPopularMovies(pageNumber: Int){
+        Log.v("MyTag", "Got popular movies data from MovieRepo")
+        movieRepo.fetchPopularMovies(pageNumber)
     }
 
     fun searchNextPageView(){

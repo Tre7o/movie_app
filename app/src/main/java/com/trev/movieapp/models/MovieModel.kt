@@ -10,7 +10,7 @@ data class MovieModel (
     var poster_path: String?,
     var release_date: String?,
     var vote_average: Double,
-    var movie_overview: String?,
+    var overview: String?,
     var runtime: Int?
 
 ): Parcelable {
@@ -31,7 +31,7 @@ data class MovieModel (
         parcel.writeString(poster_path)
         parcel.writeString(release_date)
         parcel.writeDouble(vote_average)
-        parcel.writeString(movie_overview)
+        parcel.writeString(overview)
         parcel.writeValue(runtime)
     }
 

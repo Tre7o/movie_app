@@ -3,16 +3,19 @@ package com.trev.movieapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.graphics.Color
 import com.trev.movieapp.assets.Credentials
 import android.net.Uri
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.trev.movieapp.ViewModels.MovieViewModel
 import com.trev.movieapp.adapters.MovieAdapter
 import com.trev.movieapp.requests.RetrofitClient
@@ -30,10 +33,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var movieRecycler: RecyclerView
     private lateinit var movieAdapter: MovieAdapter
 
+    private var isPopular = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val coordinatorLayout = binding.coordinator
 
         // ATTENTION: This was auto-generated to handle app links.
         val appLinkIntent: Intent = intent
@@ -49,15 +56,22 @@ class MainActivity : AppCompatActivity() {
         movieRecycler = binding.movieRecycler
         movieAdapter = MovieAdapter()
 
-        movieRecycler.layoutManager = LinearLayoutManager(this)
+        movieRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         movieRecycler.adapter = movieAdapter
 
         // RecyclerView Pagination
         // allow user to go to next page of query results
         movieRecycler.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if(!recyclerView.canScrollVertically(1)){
-                    // if recyclerView can't scroll vertically anymore
+                if(recyclerView.canScrollHorizontally(1)){
+//                    val snackbar: Snackbar = Snackbar.make(coordinatorLayout, "You've reached the end", Snackbar.LENGTH_SHORT)
+//                    snackbar.setAction("CLOSE", View.OnClickListener {
+//
+//                    })
+//                    snackbar.setActionTextColor(Color.CYAN)
+//                    snackbar.show()
+                }else{
+                    // if recyclerView can't scroll horizontally anymore
                     // display next results
                     movieViewModel.searchNextPageView()
                 }
@@ -68,6 +82,22 @@ class MainActivity : AppCompatActivity() {
         setUpSearchView()
         observeDataChanges()
 
+        // observe popular movie changes
+        getPopularMovies(1)
+        observePopularMovies()
+
+    }
+
+    private fun observePopularMovies() {
+        movieViewModel.popularMovieLiveData.observe(this, Observer<List<MovieModel>?> { popularMovies ->
+            // This block will be executed when popularMovieLiveData changes
+            movieAdapter.submitList(popularMovies)
+            if (popularMovies != null){
+                for (popMovie in popularMovies){
+                    Log.v("MyTag", "Observer: ${popMovie.original_title}")
+                }
+            }
+        })
     }
 
     // observing data changes
@@ -78,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             movieAdapter.submitList(movies)
             if (movies != null){
                 for (movie in movies){
-                    Log.v("MyTag", "Observer: ${movie.movie_overview}")
+                    Log.v("MyTag", "Observer: ${movie.original_title}")
                 }
             }
         })
@@ -87,6 +117,11 @@ class MainActivity : AppCompatActivity() {
     // query for searching movies
     private fun searchMovieApi(query: String, pageNumber: Int){
         movieViewModel.fetchMovies(query, pageNumber)
+    }
+
+    private fun getPopularMovies(pageNumber: Int){
+        Log.v("MyTag", "Observer: getPopularMovies() launched")
+        movieViewModel.fetchPopularMovies(1)
     }
 
     // get data from search view and make call to the API
@@ -102,6 +137,9 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+        binding.searchView.setOnSearchClickListener {
+            isPopular = false
+        }
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -183,3 +221,4 @@ class MainActivity : AppCompatActivity() {
         })
     }
 }
+
