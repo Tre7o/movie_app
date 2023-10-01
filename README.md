@@ -1,6 +1,7 @@
 # Movie App
 
-An application that uses retrofit to fetch movie data from the TMDB API, displaying the data in a recycler view
+An application that uses retrofit to fetch movie data from the TMDB API, displaying the data in a recycler view.
+
 The application is built using the Model, View, ViewModel(MVVM) architecture which separates the logic of the application from its UI
 
 # What users can do
